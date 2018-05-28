@@ -1,12 +1,27 @@
-doubleMe x = x + x
+{- 
+	Linguagens de Programaçao - Prof Bruno
 
-doubleUs x y = doubleMe x + doubleMe y
+	ROTEIRO
+	1- Instale haskell
+	2- Entre no terminal (ghci)
+	3- Chame `funcaoPrincipal`
 
-doubleSmallNumber' x = (if x >= 100 then x else doubleMe x) + 1
+	Participantes
+	- Allana
+	- Eli 
+	- Gabriel
+	
+-}
 
-conanO'Brien = "It's a-me, Conan O'Brien!"
+-- Essa é um exemplo de entrada do nosso programa, mude se quiser
+frame = [("alfa" || "beta"), "beta", ["teta"], not("gama")]
+grafo = [('a', 'b', "alfa"), ('b', 'c', "beta"), ('c', 'd', "teta"), ('d', 'e', "gama")]
 
-myName = "Eli"
+pdl = "(alfa U beta) E gama;"
+pdl = "(<alfa U beta>; teta*); ¬(gama) -> <->"
+grafoEntrada = "(a, b, alfa), (b, c, beta), (c, d, teta)"
 
-addThree :: Int -> Int -> Int -> Int  
-addThree x y z = x + y + z  
+conversaoDeEntradaPDLparaPrograma = pdl -> grafoEntrada -> codigoBonito
+
+fruncaoPrincipal = frame -> grafo -> True || False ('d', 'e', "gama")
+
