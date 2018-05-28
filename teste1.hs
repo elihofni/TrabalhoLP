@@ -10,7 +10,7 @@
 	- Allana
 	- Eli 
 	- Gabriel
-	
+	- asudhuashduash
 -}
 
 -- Essa é um exemplo de entrada do nosso programa, mude se quiser
