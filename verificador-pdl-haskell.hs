@@ -9,58 +9,52 @@
     3- Chame verificaValidade com os parâmetros necessários
 
     PARTICIPANTES
-    - Allana
     - Elihofni 
     - Gabriel
 
     Esses são exemplos de entrada do nosso programa
-      [("alfa")] []
-      [("alfa")] [("A", "B", "alfa")]
-      [("alfa E beta")] [("A", "B", "alfa")]
-      [("alfa OU beta")] [("A", "B", "outro")]
+           W                                   R                                          pi                              RESPOSTA ESPERADA
+      ------------    --------------------------------------------------      --------------------------        ------------------------------------
+      [1, 2]          [(1, 2, "a")]                                           [["a"]]                           ([],"Eh valida")
+      [1, 2, 3]       [(1, 2, "a"), (2, 3, "b")]                              [["a", "b"]]                      ([],"Eh valida")
+      [1, 2, 3, 4]    [(1, 2, "a"), (2, 4, "c"), (1, 3, "b"), (3, 4, "c")]    [["a", "c"], ["b", "c"]]          ([],"Eh valida")
+      [1, 2, 3, 4]    [(1, 2, "a"), (2, 4, "c"), (1, 3, "b"), (3, 4, "c")]    [["a", "c"], ["b", "d"]]          ([("d",(-1,-1,"d"))],"Nao eh valida")
+      [1, 2]          [(1, 2, "a"), (1, 3, "b")]                              [["a"], ["b"]]                    ([("?",(2,3,"b"))],"Vertices e arestas incompativeis")
+      [1, 2, 3, 4]    [(1, 2, "a"), (1, 3, "b"), (2, 4, "c"), (3, 4, "c")]    [["a", "c"], ["b", "c"]]          ([("c",(1,3,"b"))],"Nao eh valida") 
+      [1, 2, 3]       [(1, 2, "a"), (2, 3, "b")]                              [["a", "b", "c"]]                 ([("c",(-1,-1,"c"))],"Nao eh valida")
 -}
 
-
--- Retorna cada elemento da tripla
-priVar :: (a, b, c) -> a
-priVar (a, _, _) = a
-
-ope :: (a, b, c) -> b
-ope (_, b, _) = b
-
-segVar :: (a, b, c) -> c
-segVar (_, _, c) = c
+-- Retorna partes da lista
+slice start stop xs = fst $ splitAt (stop - start) (snd $ splitAt start xs)
 
 
--- Frame: Lista de comandos PDL definidos por string ("variavel1 operador variavel2")
--- Grafo: Classe de um grafo (verticeOrigem, verticeDestino, programa)
-verificaValidade :: [(String)] -> ([(String, String, String)] -> (Bool, String))
-verificaValidade [] [] = (True, "Eh valido :)")
-verificaValidade [] grafo = (False, "PDL inválida")
-verificaValidade frame grafo = (status, texto)
+--    Frame PDL (F): < W, R >; W= vértices, R= arestas
+-- Programa PDL (pi): (a; b) U (b; a)
+verificaValidade :: [Integer] -> [(Integer, Integer, String)] -> [[String]] -> Integer -> [(String, (Integer, Integer, String))]
+verificaValidade [] [] [[]] start = []
+verificaValidade vertices arestas programa start = retorno
   where
-    partes      = words (head frame)
-    primeiraVar = head partes
-    operador    = if length partes > 1 
-                  then partes !! 1
-                  else ""
-    segundaVar  = last partes
-    status      = if not (null grafo)
-                  then verificaStatus (primeiraVar, operador, segundaVar) (segVar (head grafo))
-                  else True
-    texto       = if status
-                  then "PDL valida"
-                  else "Erro em (" ++ priVar (head grafo) ++ ", " ++ ope (head grafo) ++ ", " ++ segVar (head grafo) ++ ")"
+    execs = head programa
+    combs = zip execs arestas
+    
+    retorno = if length combs /= length execs 
+              then [(execs !! length combs, (-1, -1, execs !! length combs))]
+              else do
+                let teste = [(p, (orig, dest, e)) | (p, (orig, dest, e)) <- combs, p /= e]
+                teste
 
 
--- Comando: (variavel1, operador, variavel2)
--- Programa: "programa"
-verificaStatus :: (String, String, String) -> String -> Bool
-verificaStatus (var1, op, var2) programa
-  | op == "OU"  = programa == var1 || programa == var2
-  | op == "E"   = programa == var1 || programa == var2
-  | op == "*"   = if not (null var2) 
-                  then programa == var2 || programa == var1
-                  else True
-  | null op     = programa == var1
-  | otherwise   = False
+verifica :: [Integer] -> [(Integer, Integer, String)] -> [[String]] -> ([(String, (Integer, Integer, String))], String)
+verifica vertices arestas programa = (status, texto)
+  where
+    testeVertices = [(orig, dest, e) | (orig, dest, e) <- arestas, not(orig `elem` vertices) || not(dest `elem` vertices)]
+    
+    status =  if length testeVertices /= 0 
+              then [("?", (orig, dest, e)) | (orig, dest, e) <- testeVertices]
+              else verificaValidade vertices arestas programa 0
+    
+    texto =   if length testeVertices /= 0 
+              then "Vertices e arestas incompativeis"
+              else if length status == 0 then "Eh valida" else "Nao eh valida"
+
+
