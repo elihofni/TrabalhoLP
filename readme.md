@@ -1,15 +1,12 @@
 # Linguagens de Programação - Profº Bruno
 
 ### ROTEIRO
-	- Instale haskell
-	- Entre no terminal 
-	  ```
-	  > ghci	
-	  > :load verificador-pdl-haskell.hs
-	  > :set prompt "ghci "
-	  ```
-	
-	- Chame `verifica` com os parâmetros necessários
+    - 1- Instale haskell
+    - 2- Entre no terminal (a partir do diretório contendo o arquivo .hs) 
+      > ghci
+      > :set prompt "ghci "
+    - 3- :load verificador-pdl-haskell.hs
+    - 4- verifica [1, 2, 3] [(1, 2, "a"), (2, 3, "b")] [["a", "b"]]
 
 ### PARTICIPANTES
     - Elihofni 

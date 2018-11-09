@@ -3,10 +3,11 @@
 
     ROTEIRO
     1- Instale haskell
-    2- Entre no terminal 
+    2- Entre no terminal (a partir do diretório contendo o arquivo .hs) 
       ghci
       :set prompt "ghci "
-    3- Chame verificaValidade com os parâmetros necessários
+    3- :load verificador-pdl-haskell.hs
+    4- verifica [1, 2, 3] [(1, 2, "a"), (2, 3, "b")] [["a", "b"]]
 
     PARTICIPANTES
     - Elihofni 
